@@ -31,6 +31,14 @@ const productos = [
   },
 ];
 
+// IMPUT BUSQUEDA
+const normalize = (str) => {
+	str = str.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+	str = str.toLowerCase();
+	return str;
+};
+
+
 // Copia segura de productos
 
 const productosCopia = [...productos]
@@ -61,13 +69,32 @@ mostrarProductos(productosCopia)
 
 // FILTRADOS
 
+//IMPUT 
+const input = document.querySelector("#filtro")
+console.log(input)
 
+input.oninput = () => {
+	if (input.value.length !== 0) {
+    console.log("ingresaste algo al input")
+    let inputNormalizado = normalize(input.value);
+
+    const productosFiltrados = productosCopia.filter( (producto) => {
+      if((normalize(producto.nombre)).includes(inputNormalizado))return producto   
+    })
+ 
+    mostrarProductos(productosFiltrados)
+  } else {
+    mostrarProductos(productosCopia)
+  }
+};
+
+//LOS SELECTS
 
 form.onsubmit = (e) => {
 
   e.preventDefault()
 
-  // Filtrar por tipo
+  // Ver tipo elegido
   const tipo = document.querySelector("#tipo")
   console.log(tipo)
 
@@ -75,11 +102,13 @@ form.onsubmit = (e) => {
   console.log(tipoElegido)
 
 
-  // Filtrar por color
+  // Ver color elegido
   const color = document.querySelector("#color")
   console.log(color)
 
   const colorElegido = color.value
+
+  // Aplicar FILTROS 
 
   const productosFiltrados = productosCopia.filter( (producto) => {
     if(tipoElegido === "") return producto
@@ -93,7 +122,8 @@ form.onsubmit = (e) => {
   // Chaquear si hay productos
   if(productosFiltrados.length === 0){
     console.log("arrayvacio")
-
+    
+    listado.innerHTML = ""
     listado.innerHTML += `
     <div>
         <h2>No Hay Productos Disponibles</h2>
