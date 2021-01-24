@@ -81,7 +81,6 @@ input.oninput = () => {
     const productosFiltrados = productosCopia.filter( (producto) => {
       if((normalize(producto.nombre)).includes(inputNormalizado))return producto   
     })
- 
     mostrarProductos(productosFiltrados)
   } else {
     mostrarProductos(productosCopia)
@@ -94,19 +93,20 @@ form.onsubmit = (e) => {
 
   e.preventDefault()
 
+  //limpiar buscador
+  input.value = ""
+  
   // Ver tipo elegido
   const tipo = document.querySelector("#tipo")
-  console.log(tipo)
-
+ 
   const tipoElegido = tipo.value
   console.log(tipoElegido)
 
-
   // Ver color elegido
   const color = document.querySelector("#color")
-  console.log(color)
 
   const colorElegido = color.value
+  console.log(colorElegido)
 
   // Aplicar FILTROS 
 
@@ -119,7 +119,8 @@ form.onsubmit = (e) => {
     return producto.color === colorElegido
   })
 
-  // Chaquear si hay productos
+  // Si no hay productos disponibles
+
   if(productosFiltrados.length === 0){
     console.log("arrayvacio")
     
