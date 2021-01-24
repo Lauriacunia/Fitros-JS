@@ -31,16 +31,76 @@ const productos = [
   },
 ];
 
+// Copia segura de productos
+
+const productosCopia = [...productos]
+//console.log(productosCopia)
+
 
 const form = document.forms[0];
 const listado = document.getElementById('lista-de-productos');
 
+const mostrarProductos = (productosAMostrar) => {
+  
+  listado.innerHTML = ""
 
-productos.forEach(zapato => {
-  listado.innerHTML += `
-  <div class="contenedorProducto">
-  <div class="foto"><img src="${zapato.img}"></div>
-  <div class="titulo">${zapato.nombre}</div>
-  </div>
-  `;
-})
+  productosAMostrar.forEach(zapato => {
+    listado.innerHTML += `
+    <div class="contenedorProducto">
+    <div class="foto"><img src="${zapato.img}"></div>
+    <div class="titulo">${zapato.nombre}</div>
+    </div>
+    `;
+  })
+
+}
+
+// INICIO
+
+mostrarProductos(productosCopia)
+
+// FILTRADOS
+
+
+
+form.onsubmit = (e) => {
+
+  e.preventDefault()
+
+  // Filtrar por tipo
+  const tipo = document.querySelector("#tipo")
+  console.log(tipo)
+
+  const tipoElegido = tipo.value
+  console.log(tipoElegido)
+
+
+  // Filtrar por color
+  const color = document.querySelector("#color")
+  console.log(color)
+
+  const colorElegido = color.value
+
+  const productosFiltrados = productosCopia.filter( (producto) => {
+    if(tipoElegido === "") return producto
+    return producto.tipo === tipoElegido
+  })
+  .filter((producto) => {
+    if(colorElegido === "") return producto
+    return producto.color === colorElegido
+  })
+
+  // Chaquear si hay productos
+  if(productosFiltrados.length === 0){
+    console.log("arrayvacio")
+
+    listado.innerHTML += `
+    <div>
+        <h2>No Hay Productos Disponibles</h2>
+    </div>
+    `;
+  }
+
+  // Mostrar en HTML
+  mostrarProductos(productosFiltrados)
+}
